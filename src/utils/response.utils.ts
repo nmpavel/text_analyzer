@@ -24,12 +24,8 @@ export class ResponseUtils {
             statusCode: statusCode
         };
 
-        if (keyOfData && data !== undefined) {
-            responseResult[keyOfData] = data;
-        } else if (data !== undefined) {
-            // Ensure data is merged correctly without overwriting existing keys
-            responseResult = { ...responseResult, ...data };
-        }
+        if (keyOfData && data) responseResult[keyOfData] = data;
+        if (!keyOfData && data) responseResult = {...responseResult, ...data};
 
         return responseResult;
     };

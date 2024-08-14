@@ -18,8 +18,6 @@ export class TextRepository<TextDocument extends Text> {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return null;
         }
-
-        // return await this.model.findById(id);
         return await this.model.findOne({ _id: id, isDeleted: false });
     }
 
@@ -28,7 +26,6 @@ export class TextRepository<TextDocument extends Text> {
     }
 
     async deleteEntity(id: string): Promise<boolean> {
-        // const data = await this.model.findByIdAndDelete(id);
         const data = await this.model.findByIdAndUpdate(
             id,
             { isDeleted: true },
