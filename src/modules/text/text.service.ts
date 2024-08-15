@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Logger, LoggerService, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Text } from './schema/Text.schema';
@@ -14,17 +14,16 @@ import { Cache } from 'cache-manager';
 @Injectable()
 export class TextService {
   constructor(@InjectModel('Text') private readonly TextModel: Model<Text>, 
-  @Inject(CACHE_MANAGER) private readonly cacheManager: Cache ) {
+  @Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {
   }
-
+  
   private readonly TextRepository = new TextRepository(this.TextModel);
 
   async create(dto: CreateTextDto): Promise<Text> {
     const data = await this.TextRepository.createEntity(dto);
+
     if (!data) {
-      throw new BadRequestException(
-        Constants.CREATE_FAILED,
-      );
+      throw new BadRequestException(Constants.CREATE_FAILED);
     }
     return ResponseUtils.successResponseHandler(201, "Successfully created Content.", "data", data);
   }
@@ -107,7 +106,7 @@ export class TextService {
     const charCount = content?.replace(/\s+/g, '').length;
     await this.cacheManager.set(cacheKey, charCount, 3600);
 
-    return ResponseUtils.successResponseHandler(200, "Character count calculated", "charCount", charCount);
+    return ResponseUtils.successResponseHandler(200, "Character count calculated", "data", charCount);
   }
 
   async getSentenceCount(content: string): Promise<any> {
@@ -120,7 +119,7 @@ export class TextService {
 
     const sentCount = content?.split(/[.!?]+/).filter(Boolean).length;
     await this.cacheManager.set(cacheKey, sentCount, 3600);
-    return ResponseUtils.successResponseHandler(200, "Sentence count calculated", "sentCount", sentCount);
+    return ResponseUtils.successResponseHandler(200, "Sentence count calculated", "data", sentCount);
   }
 
   async getParagraphCount(content: string): Promise<any> {
@@ -133,7 +132,7 @@ export class TextService {
 
     const parCount = content?.split(/\n+/).filter(Boolean).length;
     await this.cacheManager.set(cacheKey, parCount, 3600);
-    return ResponseUtils.successResponseHandler(200, "Paragaraph count calculated", "parCount", parCount);
+    return ResponseUtils.successResponseHandler(200, "Paragaraph count calculated", "data", parCount);
   }
 
   async getLongestWord(content: string): Promise<any> {
@@ -146,6 +145,6 @@ export class TextService {
 
     const longestWord = content?.split(/\s+/).reduce((longest, current) => current.length > longest.length ? current : longest, '');
     await this.cacheManager.set(cacheKey, longestWord, 3600);
-    return ResponseUtils.successResponseHandler(200, "Longest word found", "longestWord", longestWord);
+    return ResponseUtils.successResponseHandler(200, "Longest word found", "data", longestWord);
   }
 }

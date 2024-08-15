@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { AllExceptionFilter } from './utils/exception.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { AllExceptionFilter } from './utils/exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+ 
+const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new AllExceptionFilter());
-
   app.enableCors({
       origin: true,
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
