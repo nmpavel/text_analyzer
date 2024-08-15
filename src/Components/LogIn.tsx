@@ -1,63 +1,64 @@
-'use client';
+"use client";
 import ApiService from "@/utils/apiCore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export interface UserModel {
-    userName?: string;
-    password?: string;
-    role?: string;
+  userName?: string;
+  password?: string;
+  role?: string;
 }
 const LogIn = () => {
-    const [showLoader, setShowLoader] = useState<boolean>(false);
-    const [user ,setUser] = useState<UserModel>();
-    const router = useRouter();
-    const apiService = new ApiService();
-    const validateForm = (data: any) => {
-        setShowLoader(true);
-        try {
-          const requiredFields = ['userName', 'password'];
-          for (const field of requiredFields) {
-            if (!data || !data[field]) {
-              alert(`Please Enter ${field}.`);
-              return false;
-            }
-          }
-          return true;
-        } catch (error) {
-          console.error('Error in validateForm:', error);
-          return false;
-        } finally {
-          setShowLoader(false);
-        }
-      };
-      const handleChange = ({ target: { name, value } }: any) =>
-        setUser((prev: any) => ({ ...prev, [name]: value }));
+  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [user, setUser] = useState<UserModel>();
+  const router = useRouter();
+  const apiService = new ApiService();
 
-      const handleSubmit = async (event: any) => {
-        event.preventDefault();
-          const data:UserModel = {
-             userName: user?.userName,
-             password: user?.password
-          };
-          if (!validateForm(data)) {
-            return;
-          }
-          try {
-            const response = await apiService.postData('auth/login',data);
-            if (response?.statusCode === 201) {
-              localStorage.setItem('token', response?.data?.access_token)
-              localStorage.setItem('role', response?.data?.role)
-              router.push("/dashboard")
-            } 
-          } catch (e: any) {
-            alert('Something went wrong!');
-          } finally {
-            setShowLoader(false);
-          }
-        
-      };
-      
+  const validateForm = (data: any) => {
+    setShowLoader(true);
+    try {
+      const requiredFields = ["userName", "password"];
+      for (const field of requiredFields) {
+        if (!data || !data[field]) {
+          alert(`Please Enter ${field}.`);
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      console.error("Error in validateForm:", error);
+      return false;
+    } finally {
+      setShowLoader(false);
+    }
+  };
+  
+  const handleChange = ({ target: { name, value } }: any) =>
+    setUser((prev: any) => ({ ...prev, [name]: value }));
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const data: UserModel = {
+      userName: user?.userName,
+      password: user?.password
+    };
+    if (!validateForm(data)) {
+      return;
+    }
+    try {
+      const response = await apiService.postData("auth/login", data);
+      if (response?.statusCode === 201) {
+        localStorage.setItem("token", response?.data?.access_token);
+        localStorage.setItem("role", response?.data?.role);
+        router.push("/dashboard");
+      }
+    } catch (e: any) {
+      alert("Something went wrong!");
+    } finally {
+      setShowLoader(false);
+    }
+  };
+
   return (
     <section className="lg:h-screen bg-gray-700 p-16 text-white">
       <div className="h-full">
@@ -189,7 +190,7 @@ const LogIn = () => {
                 <p className="mb-0 mt-2 pt-1 text-sm font-semibold">
                   Don't have an account?
                   <a
-                    href="register"
+                    href="signup"
                     className="text-red-400 transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700"
                   >
                     Register
