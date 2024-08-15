@@ -24,13 +24,29 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A backend service for text analysis built using the [Nest](https://github.com/nestjs/nest) framework with TypeScript.
 
 ## Installation
+
+To set up the project locally, follow these steps:
+
+1. **Clone the repository**:
+
+```bash
+$ git clone https://github.com/your-repository/text-analyzer-backend.git
+$ cd text-analyzer-backend
+```
+2. **Install dependencies**:
 
 ```bash
 $ npm install
 ```
+3. **Create a .env file**:
+
+```bash
+$ cp .env.example .env
+```
+
 
 ## Running the app
 
