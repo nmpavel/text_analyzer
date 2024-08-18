@@ -26,6 +26,12 @@
 
 A backend service for text analysis built using the [Nest](https://github.com/nestjs/nest) framework with TypeScript.
 
+I used various third party packages here to enhance the projects performance , learn and do new things. For example:
+
+- I used "pino" for log visualization
+- Implemented Oauth 2.0 with the help of "passport"
+- Used "redis" for caching 
+
 ## Installation
 
 To set up the project locally, follow these steps:
@@ -46,7 +52,10 @@ $ npm install
 ```bash
 $ cp .env.example .env
 ```
+4. **Run the Database on your pc**:
 
+```bash
+$ mongod
 
 ## Running the app
 
