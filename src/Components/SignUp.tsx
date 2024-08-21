@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 
 const SignUp = () => {
   const [role, setRole] = useState<string>("");
-  const [user ,setUser] = useState<UserModel>();
+  const [user, setUser] = useState<UserModel>();
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const apiService = new ApiService();
   const router = useRouter();
-  
+
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setRole(event.target.value);
   };
@@ -21,7 +21,7 @@ const SignUp = () => {
   const validateForm = (data: any) => {
     setShowLoader(true);
     try {
-      const requiredFields = ['userName', 'password', 'role'];
+      const requiredFields = ["userName", "password", "role"];
       for (const field of requiredFields) {
         if (!data || !data[field]) {
           alert(`Please Enter ${field}.`);
@@ -30,7 +30,7 @@ const SignUp = () => {
       }
       return true;
     } catch (error) {
-      console.error('Error in validateForm:', error);
+      console.error("Error in validateForm:", error);
       return false;
     } finally {
       setShowLoader(false);
@@ -39,26 +39,26 @@ const SignUp = () => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-      const data:UserModel = {
-         userName: user?.userName,
-         password: user?.password,
-         role: role
-      };
-      if (!validateForm(data)) {
-        return;
+    const data: UserModel = {
+      userName: user?.userName,
+      password: user?.password,
+      role: role,
+    };
+    if (!validateForm(data)) {
+      return;
+    }
+    try {
+      const response = await apiService.postData("auth/signup", data);
+      if (response?.statusCode === 201) {
+        localStorage.setItem("token", response?.data?.access_token);
+        localStorage.setItem("role", response?.data?.role);
+        router.push("/dashboard");
       }
-      try {
-        const response = await apiService.postData('auth/signup',data);
-        if (response?.statusCode === 201) {
-          localStorage.setItem('token', response?.data?.access_token)
-          localStorage.setItem('role', response?.data?.role)
-          router.push("/dashboard")
-        } 
-      } catch (e: any) {
-        alert('Something went wrong!');
-      } finally {
-        setShowLoader(false);
-      }  
+    } catch (e: any) {
+      alert("Something went wrong!");
+    } finally {
+      setShowLoader(false);
+    }
   };
 
   return (
@@ -75,7 +75,7 @@ const SignUp = () => {
           <div className="mb-12 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12">
             <form onSubmit={handleSubmit}>
               <div className="relative mb-6" data-twe-input-wrapper-init>
-              <input
+                <input
                   type="text"
                   name="userName"
                   value={user?.userName}
